@@ -43,6 +43,7 @@ const autenticarMiddleware = async (req, res, next) => {
         const usuario = await Usuario.findOne({ email });
         console.log(usuario);
         if (!usuario) {
+            console.log('no esta el usuario')
             res.status(401).json('Credenciales inválidas');
             return;
         }
@@ -50,14 +51,17 @@ const autenticarMiddleware = async (req, res, next) => {
         // Revisar Password
         if (usuario.password === password) {
             res.status(200).json('ok');
+            console.log('no hay contraseña')
         } else {
             res.status(400).json('no');
+            console.log('no funciona nooo')
         }
 
         // Continuar con el siguiente middleware
         next();
     } catch (error) {
         console.log(error);
+        console.log('erro grandeee')
         res.status(500).json('Error interno del servidor');
     }
 };
