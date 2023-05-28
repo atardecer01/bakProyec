@@ -1,7 +1,6 @@
 import express from "express"
 import dotenv from 'dotenv';
 import cors from 'cors';
-import conectarDB from "./config/db.js";
 import usuarioRoutes from './routes/usuarioRoutes.js'
 
 const app = express(); 
@@ -10,7 +9,23 @@ app.use(express.json());
 
 dotenv.config();
 
-conectarDB();
+import mongoose from "mongoose";
+
+
+try {
+    const db = await mongoose.connect(process.env.MONGO_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
+
+    const url = `${db.connection.host}:${db.connection.port}`
+    console.log(`MongoDB conectado en: ${url}`);
+
+} catch (error) {
+    console.log(`error: ${error.message}`);
+    process.exit(1);
+}
+
 
 const dominiosPermitidos = ['http://localhost:3000'];
 
