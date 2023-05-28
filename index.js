@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from 'dotenv';
-import usuarioRoutes from './routes/usuarioRoutes.js';
 import mongoose from "mongoose";
+
 
 const app = express();
 
@@ -23,7 +23,48 @@ try {
     process.exit(1);
 }
 
-app.use("/api", usuarioRoutes);
+const usuarioSchema = mongoose.Schema({
+    nombre:  String,
+       
+    password: String,
+        
+    email:  String,
+        
+});
+
+
+const Usuario = mongoose.model("Usuarios", usuarioSchema);
+
+const autenticarMiddleware = async (req, res, next) => {
+    const { email, password } = req.body;
+
+    try {
+        // Comprobar si el usuario existe
+        const usuario = await Usuario.findOne({ email });
+        console.log(usuario);
+        if (!usuario) {
+            res.status(401).json('Credenciales inválidas');
+            return;
+        }
+
+        // Revisar Password
+        if (usuario.password === password) {
+            res.status(200).json('ok');
+        } else {
+            res.status(400).json('no');
+        }
+
+        // Continuar con el siguiente middleware
+        next();
+    } catch (error) {
+        console.log(error);
+        res.status(500).json('Error interno del servidor');
+    }
+};
+
+// Uso de la función middleware
+app.use('/api/usuarios/login', autenticarMiddleware);
+
 
 const PORT = process.env.PORT || 4000;
 
