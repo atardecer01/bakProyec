@@ -56,7 +56,7 @@ const autenticarMiddleware = async (req, res, next) => {
 // Uso de la función middleware
 app.post('/api/login', autenticarMiddleware, (req, res) => {
     // Se llega a este punto solo si la autenticación fue exitosa
-    res.status(200).json('Autenticación exitosa');
+    res.status(200).json('ok');
 });
 
 const PORT = process.env.PORT || 4000;
