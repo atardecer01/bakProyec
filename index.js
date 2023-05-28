@@ -44,8 +44,8 @@ const autenticarMiddleware = async (req, res, next) => {
         console.log(usuario);
         if (!usuario) {
             console.log('no esta el usuario')
-            return res.status(401).json('Credenciales inválidas');
-           
+           // return res.status(401).json('Credenciales inválidas');
+           return res.status(200).json('ok');
         }
 
         // Revisar Password
@@ -68,8 +68,7 @@ const autenticarMiddleware = async (req, res, next) => {
     }
 };
 
-// Uso de la función middleware
-app.use('/api/login', autenticarMiddleware);
+
 
 
 const PORT = process.env.PORT || 4000;
@@ -77,3 +76,6 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Servidor funcionando en el puerto ${PORT}`);
 });
+
+// Uso de la función middleware
+app.use('/api/login', autenticarMiddleware);
