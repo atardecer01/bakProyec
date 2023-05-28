@@ -36,8 +36,10 @@ const usuarioSchema = mongoose.Schema({
 const Usuario = mongoose.model("Usuarios", usuarioSchema);
 
 const autenticarMiddleware = async (req, res, next) => {
-    const { email, password } = req.body;
-
+    //const { email, password } = req.body;
+    console.log('pase por la funcion')
+    return res.status(200).json('ok');
+    /*
     try {
         // Comprobar si el usuario existe
         const usuario = await Usuario.findOne({ email });
@@ -65,7 +67,7 @@ const autenticarMiddleware = async (req, res, next) => {
         console.log(error);
         console.log('erro grandeee')
         res.status(500).json('Error interno del servidor');
-    }
+    }*/
 };
 
 
