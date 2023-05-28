@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from 'dotenv';
 import mongoose from "mongoose";
+import cors from 'cors';
 
 const app = express();
 
@@ -52,6 +53,9 @@ const autenticarMiddleware = async (req, res, next) => {
         res.status(500).json('Error interno del servidor');
     }
 };
+
+// Habilitar CORS
+app.use(cors());
 
 // Uso de la función middleware
 app.post('/api/login', autenticarMiddleware, (req, res) => {
