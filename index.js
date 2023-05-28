@@ -42,7 +42,7 @@ const autenticarMiddleware = async (req, res, next) => {
 
         // Revisar Password
         if (usuario.password === password) {
-            return next(); // Llamar al siguiente middleware
+            return res.status(200).json('ok'); // Llamar al siguiente middleware
         } else {
             return res.status(400).json('Contraseña incorrecta');
         }
