@@ -1,16 +1,13 @@
-import express from "express"
+import express from "express";
 import dotenv from 'dotenv';
-import cors from 'cors';
-import usuarioRoutes from './routes/usuarioRoutes.js'
+import usuarioRoutes from './routes/usuarioRoutes.js';
+import mongoose from "mongoose";
 
-const app = express(); 
+const app = express();
 
 app.use(express.json());
 
 dotenv.config();
-
-import mongoose from "mongoose";
-
 
 try {
     const db = await mongoose.connect(process.env.MONGO_URI, {
@@ -26,19 +23,9 @@ try {
     process.exit(1);
 }
 
-
-const dominiosPermitidos = ['http://localhost:3000'];
-
-const corsOptions = {
-    origin: ['https://front-topaz-beta.vercel.app/',dominiosPermitidos],
-    methods: ["GET","POST"]
-  };
-
-app.use(cors(corsOptions))
-
 app.use("/api", usuarioRoutes);
 
-const PORT = process.env.PORT || 4000
+const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
     console.log(`Servidor funcionando en el puerto ${PORT}`);
