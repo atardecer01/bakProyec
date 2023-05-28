@@ -45,7 +45,7 @@ const autenticarMiddleware = async (req, res, next) => {
         if (!usuario) {
             console.log('no esta el usuario')
             res.status(401).json('Credenciales inválidas');
-            return;
+           
         }
 
         // Revisar Password
