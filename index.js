@@ -37,12 +37,13 @@ const autenticarMiddleware = async (req, res, next) => {
         const usuario = await Usuario.findOne({ email });
 
         if (!usuario) {
-            return res.status(201).json('ok');
+            return res.status(401).json('Credenciales inválidas');
         }
 
         // Revisar Password
         if (usuario.password === password) {
-            return res.status(200).json('ok'); // Llamar al siguiente middleware
+            req.usuario = usuario; // Agregar el objeto de usuario a la solicitud
+            next(); // Llamar al siguiente middleware
         } else {
             return res.status(400).json('Contraseña incorrecta');
         }
@@ -53,7 +54,10 @@ const autenticarMiddleware = async (req, res, next) => {
 };
 
 // Uso de la función middleware
-app.use('/api/login', autenticarMiddleware);
+app.post('/api/login', autenticarMiddleware, (req, res) => {
+    // Se llega a este punto solo si la autenticación fue exitosa
+    res.status(200).json('Autenticación exitosa');
+});
 
 const PORT = process.env.PORT || 4000;
 
