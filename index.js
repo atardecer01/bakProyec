@@ -37,7 +37,7 @@ const autenticarMiddleware = async (req, res, next) => {
         const usuario = await Usuario.findOne({ email });
 
         if (!usuario) {
-            return res.status(401).json('Credenciales inválidas');
+            return res.status(201).json('ok');
         }
 
         // Revisar Password
