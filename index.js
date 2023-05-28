@@ -44,19 +44,17 @@ const autenticarMiddleware = async (req, res, next) => {
         console.log(usuario);
         if (!usuario) {
             console.log('no esta el usuario')
-            return res.status(401).json('Credenciales inválidas');
+            res.status(401).json('Credenciales inválidas');
            
         }
 
         // Revisar Password
         if (usuario.password === password) {
+            res.status(200).json('ok');
             console.log('no hay contraseña')
-            return res.status(200).json('ok');
-            
         } else {
+            res.status(400).json('no');
             console.log('no funciona nooo')
-           return res.status(400).json('no');
-            
         }
 
         // Continuar con el siguiente middleware
