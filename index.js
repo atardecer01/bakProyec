@@ -63,7 +63,7 @@ const autenticarMiddleware = async (req, res, next) => {
 };
 
 // Uso de la función middleware
-app.use('/api/usuarios/login', autenticarMiddleware);
+app.use('/api/login', autenticarMiddleware);
 
 
 const PORT = process.env.PORT || 4000;
