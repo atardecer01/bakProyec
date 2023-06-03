@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import mongoose from "mongoose";
 import cors from 'cors';
 import conectarDB from "./config/db.js";
+import Usuario from "./models/Usuario.js";
 
 const app = express();
 
@@ -12,13 +13,6 @@ dotenv.config();
 
 conectarDB();
 
-const usuarioSchema = mongoose.Schema({
-    nombre: String,
-    password: String,
-    email: String,
-});
-
-const Usuario = mongoose.model("Usuarios", usuarioSchema);
 
 const autenticarMiddleware = async (req, res, next) => {
     const { email, password } = req.body;
