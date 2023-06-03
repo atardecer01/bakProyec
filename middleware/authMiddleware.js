@@ -13,17 +13,17 @@ const checkAuth = async (req, res, next) => {
 
             return next();
         } catch (error) {
-       res.status(403).json({ msg: error.message });
-    }
-
-    next();
-}            const e = new Error("Token no válido o inexistente");
+            const e = new Error("Token no válido o inexistente");
             res.status(403).json({ msg: e.message });
         }
     }
 
     if (!token) {
         const error = new Error("Token no válido o inexistente");
- 
+        res.status(403).json({ msg: error.message });
+    }
+
+    next();
+}
 
 export default checkAuth;
