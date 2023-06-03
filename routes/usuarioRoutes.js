@@ -4,8 +4,12 @@ import {
     confirmar,
     autenticar
 } from '../controllers/usuarioController.js'
-import autenticarMiddleware from '../middleware/authMiddleware.js';
+import cors from 'cors';
+
+
 const router = express.Router();
+// Habilitar CORS
+app.use(cors());
 
 //area publica
 router.post('/', registrar);
