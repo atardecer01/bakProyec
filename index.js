@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import conectarDB from "./config/db.js";
 import Usuario from "./models/Usuario.js";
-import { autenticar } from "./controllers/usuarioController.js";
+import { autenticar, registrar } from "./controllers/usuarioController.js";
 const app = express();
 
 app.use(express.json());
@@ -21,7 +21,7 @@ app.post('/api/login', autenticar, (req, res) => {
     // Se llega a este punto solo si la autenticación fue exitosa
     res.status(200).json('ok');
 });
-
+app.post('/api/register', registrar);
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
