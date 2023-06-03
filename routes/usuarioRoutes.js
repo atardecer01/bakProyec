@@ -7,7 +7,7 @@ import {
 import cors from 'cors';
 
 
-const router = express.Router();
+const router = express();
 // Habilitar CORS
 app.use(cors());
 
