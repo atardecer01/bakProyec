@@ -4,9 +4,6 @@ import cors from 'cors';
 import conectarDB from "./config/db.js";
 import Usuario from "./models/Usuario.js";
 import { autenticar } from "./controllers/usuarioController.js";
-import usuarioRoutes from './routes/usuarioRoutes.js'
-
-
 const app = express();
 
 app.use(express.json());
@@ -20,8 +17,10 @@ conectarDB();
 app.use(cors());
 
 // Uso de la función middleware
-
-app.use("/api", usuarioRoutes);
+app.post('/api/login', autenticar, (req, res) => {
+    // Se llega a este punto solo si la autenticación fue exitosa
+    res.status(200).json('ok');
+});
 
 const PORT = process.env.PORT || 4000;
 
