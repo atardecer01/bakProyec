@@ -2,8 +2,8 @@ import express from "express";
 import dotenv from 'dotenv';
 import cors from 'cors';
 import conectarDB from "./config/db.js";
-import Usuario from "./models/Usuario.js";
 import { autenticar, registrar } from "./controllers/usuarioController.js";
+import { guardar } from "./controllers/comentarioController.js";
 const app = express();
 
 app.use(express.json());
@@ -22,6 +22,8 @@ app.post('/api/login', autenticar, (req, res) => {
     res.status(200).json('ok');
 });
 app.post('/api/register', registrar);
+app.post('/api/commit', guardar);
+
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {

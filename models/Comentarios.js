@@ -1,4 +1,4 @@
-import { ObjectId, Int32, Date } from "mongodb";
+import { ObjectId } from "mongodb";
 import mongoose from "mongoose";
 
 const comentarioSchema = mongoose.Schema({
@@ -6,7 +6,7 @@ const comentarioSchema = mongoose.Schema({
     comentadorID: ObjectId,
     comentadoID: ObjectId,
     fecha: Date,
-    hora: Int32
+    hora: Number
 });
 
 
