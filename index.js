@@ -17,10 +17,8 @@ conectarDB();
 app.use(cors());
 
 // Uso de la función middleware
-app.post('/api/login', autenticar, (req, res) => {
-    // Se llega a este punto solo si la autenticación fue exitosa
-    res.status(200).json('ok');
-});
+app.post('/api/login', autenticar);
+
 app.post('/api/register', registrar);
 app.post('/api/commit', guardar);
 

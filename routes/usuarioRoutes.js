@@ -13,10 +13,7 @@ app.use(cors());
 
 //area publica
 router.post('/', registrar);
-router.post('/login', autenticar, (req, res) => {
-    // Se llega a este punto solo si la autenticación fue exitosa
-    res.status(200).json('ok');
-});
+router.post('/login', autenticar);
 //area privada
 //router.get('/perfil', checkAuth, perfil);
 
