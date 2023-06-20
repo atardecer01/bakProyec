@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import conectarDB from "./config/db.js";
 import { autenticar, registrar } from "./controllers/usuarioController.js";
-import { guardar } from "./controllers/comentarioController.js";
+import { guardar, obtenerComentarios } from "./controllers/comentarioController.js";
 const app = express();
 
 app.use(express.json());
@@ -21,6 +21,7 @@ app.post('/api/login', autenticar);
 
 app.post('/api/register', registrar);
 app.post('/api/commit', guardar);
+app.get('/api/comentarios',obtenerComentarios);
 
 const PORT = process.env.PORT || 4000;
 
