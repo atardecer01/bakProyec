@@ -1,9 +1,11 @@
 import Usuario from "../models/Usuario.js";
+import nodemailer from 'nodemailer';
+import { nanoid } from 'nanoid';
 
 
 const registrar = async (req, res) => {
     const {email} = req.body
-
+    console.log(email)
     //prevenir usuarios duplicados
     const existeUsuario = await Usuario.findOne({email})
 
@@ -87,9 +89,94 @@ const confirmar = async (req, res) => {
       res.status(500).json('Error interno del servidor');
     }
   };
+
+  const olvidePassword = async (req, res) => {
+    const { email } = req.body;
+    console.log(email)
+    const token = nanoid();
+    const existeUsuario = await Promise.resolve(Usuario.findOne({ email }));
+    if (!existeUsuario) {
+      const error = new Error('El usuario no existe');
+      return res.status(400).json({ msg: error.message });
+
+    }
   
+    try {
+      existeUsuario.token = token;
+      await existeUsuario.save();
+      await sendPasswordResetEmail(email, token);
+      res.json({ msg: 'Hemos enviado un email con las instrucciones' });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Función para enviar el correo electrónico de restablecimiento de contraseña
+async function sendPasswordResetEmail(email, token) {
+  // Configurar el transporte de correo electrónico
+  const transporter = nodemailer.createTransport({
+    // Configura el transporte de correo electrónico según tus necesidades
+    // Consulta la documentación de Nodemailer para obtener más detalles
+    service: 'Outlook',
+    auth: {
+      user: process.env.CORREO,
+      pass: process.env.CONTRASENA,
+    },
+  });
+
+  // Configurar el contenido del correo electrónico
+  const mailOptions = {
+    from: process.env.CORREO,
+    to: email,
+    subject: 'Recuperación de contraseña',
+    text: `Recibimos una solicitud para restablecer tu contraseña. A continuación, encontrarás un código de verificación que deberás ingresar 
+    en el formulario de restablecimiento de contraseña:
+
+    Código de verificación: ${token}
+    Si no realizaste esta solicitud, puedes ignorar este mensaje y tu contraseña actual permanecerá sin cambios.
+    Si tienes alguna pregunta o necesitas ayuda, no dudes en contactarnos.
+
+    ¡Atentamente,
+    El equipo de Desarrollo
+    `,
+  };
+
+  // Enviar el correo electrónico
+  return transporter.sendMail(mailOptions);
+}
+
+const nuevoPassword = async (req, res) => {
+  const { code, newPassword } = req.body;
+  console.log(code, newPassword)
+  const token = code;
+  if(code == undefined)
+  {
+    const error = new Error('Hubo un error');
+    return res.status(400).json({ msg: error.message });
+  }
+  try {
+      const usuario = await Promise.resolve(Usuario.findOne({ token }));
+      console.log(usuario)
+      if (!usuario) {
+          const error = new Error('Hubo un error');
+          return res.status(400).json({ msg: error.message });
+      }
+
+      usuario.token = null;
+      usuario.password = newPassword;
+      await usuario.save();
+      res.json({ msg: 'Password modificado correctamente' });
+      console.log(usuario);
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({ msg: 'Hubo un error al modificar la contraseña' });
+  }
+};
+
 
 export {
+  nuevoPassword,
+  olvidePassword,
     registrar,
     perfil,
     confirmar,
