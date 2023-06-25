@@ -117,9 +117,7 @@ async function sendPasswordResetEmail(email, token) {
   const transporter = nodemailer.createTransport({
     // Configura el transporte de correo electrónico según tus necesidades
     // Consulta la documentación de Nodemailer para obtener más detalles
-    host:"smtp.elasticemail.com",
-    port: 2525,
-    secure: false,
+    service: 'Outlook',
     auth: {
       user: process.env.CORREO,
       pass: process.env.CONTRASENA,
