@@ -66,14 +66,14 @@ const confirmar = async (req, res) => {
   
       if (!usuario) {
         return res.status(401).json('Credenciales inválidas');
-      }
+      }//hola
   
       // Revisar Password
       if (usuario.password === password) {
           
         // Generar el token JWT   
         const privateKey = process.env.JWT_SECRET; 
-        const token = jwt.sign({ userId: usuario._id, email }, privateKey, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: usuario._id, email ,nameU: usuario.nombre}, privateKey, { expiresIn: '1h' });
         req.usuario = usuario; // Agregar el objeto de usuario a la solicitud
         req.token = token; // Agregar el token a la solicitud
         
@@ -96,15 +96,17 @@ const confirmar = async (req, res) => {
     const token = nanoid();
     const existeUsuario = await Promise.resolve(Usuario.findOne({ email }));
     if (!existeUsuario) {
+      
       const error = new Error('El usuario no existe');
       return res.status(400).json({ msg: error.message });
-
+      
     }
   
     try {
       existeUsuario.token = token;
       await existeUsuario.save();
       await sendPasswordResetEmail(email, token);
+      
       res.json({ msg: 'Hemos enviado un email con las instrucciones' });
     } catch (error) {
       console.log(error);
@@ -117,7 +119,9 @@ async function sendPasswordResetEmail(email, token) {
   const transporter = nodemailer.createTransport({
     // Configura el transporte de correo electrónico según tus necesidades
     // Consulta la documentación de Nodemailer para obtener más detalles
-    service: 'Outlook',
+    host:"smtp.elasticemail.com",
+    port: 2525,
+    secure: false,
     auth: {
       user: process.env.CORREO,
       pass: process.env.CONTRASENA,
@@ -173,12 +177,39 @@ const nuevoPassword = async (req, res) => {
   }
 };
 
+const cambiarDatos = async (req, res) =>
+{
+  const {_id, name, email, username, profileImage} = req.body
+  console.log(_id)
+  try {
+    const usuario = await Promise.resolve(Usuario.findOne({ _id }));
+    console.log(usuario)
+    if (!usuario) {
+        const error = new Error('Hubo un error');
+        return res.status(400).json({ msg: error.message });
+    }
 
+    
+    
+    usuario.nombre = name;
+    usuario.email = email;
+    usuario.user = username;
+    usuario.foto = profileImage;
+
+    await usuario.save();
+    res.json({ msg: 'Datos modificados correctamente' });
+    console.log(usuario);
+} catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: 'Hubo un error al modificar los datos' });
+}
+}
 export {
   nuevoPassword,
   olvidePassword,
     registrar,
     perfil,
     confirmar,
-    autenticar
+    autenticar,
+    cambiarDatos
 }
